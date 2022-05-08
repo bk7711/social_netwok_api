@@ -6,6 +6,9 @@ const UserSchema = new Schema(
     userName: {
       type: String,
     },
+    email: {
+      type: String,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
@@ -15,6 +18,12 @@ const UserSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "Thought",
+      },
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },
@@ -28,8 +37,8 @@ const UserSchema = new Schema(
 );
 
 UserSchema.virtual("thoughtCount").get(function () {
-  return this.thought.reduce(
-    (total, thought) => total + thought.replies.length + 1,
+  return this.thoughts.reduce(
+    (total, thoughts) => total + thoughts.replies.length + 1,
     0
   );
 });
