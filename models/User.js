@@ -5,14 +5,14 @@ const UserSchema = new Schema(
   {
     userName: {
       type: String,
+      required: true,
+      unique: true,
+      trim: true,
     },
     email: {
       type: String,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      get: (createdAtVal) => dateFormat(createdAtVal),
+      required: true,
+      unique: true,
     },
     thoughts: [
       {
@@ -36,11 +36,8 @@ const UserSchema = new Schema(
   }
 );
 
-UserSchema.virtual("thoughtCount").get(function () {
-  return this.thoughts.reduce(
-    (total, thoughts) => total + thoughts.replies.length + 1,
-    0
-  );
+UserSchema.virtual("friendCount").get(function () {
+  return this.friends.length;
 });
 
 const User = model("User", UserSchema);

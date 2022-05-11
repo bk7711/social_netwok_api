@@ -1,13 +1,22 @@
 const { Thought, User } = require("../models");
 
 const thoughtController = {
+  //get thoughts
+  getThought(req, res) {
+    Thought.find({})
+      .sort({ createdAt: -1 })
+      .then((data) => {
+        res.json(data);
+      })
+      .catch((err) => res.json(err));
+  },
   // add thought to User
   addThought({ params, body }, res) {
     console.log(body);
     Thought.create(body)
       .then(({ _id }) => {
         return User.findOneAndUpdate(
-          { _id: params.UserId },
+          { _id: body.userId },
           { $push: { thoughts: _id } },
           { new: true }
         );
